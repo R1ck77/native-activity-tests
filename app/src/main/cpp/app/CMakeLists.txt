@@ -13,7 +13,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++11 -Wall -Werror")
 # Refer to: https://github.com/android-ndk/ndk/issues/381.
 set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -u ANativeActivity_onCreate")
 
-include_directories(${PROJECT_SOURCE_DIR}/lua)
+include_directories(${PROJECT_SOURCE_DIR}/fooext/lua ${PROJECT_SOURCE_DIR}/fooext)
 
 add_library(native-activity SHARED main.cpp)
   
@@ -27,4 +27,4 @@ target_link_libraries(native-activity
     EGL
     GLESv1_CM
     log
-    luashared)
+    foo)

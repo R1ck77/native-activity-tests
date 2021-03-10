@@ -35,6 +35,7 @@ extern "C" {
 #include <lua.h>
 #include <lauxlib.h>
 #include <lualib.h>
+#include <foo.h>
 }
 
 #define LOGI(...) ((void)__android_log_print(ANDROID_LOG_INFO, "native-activity", __VA_ARGS__))
@@ -164,6 +165,7 @@ static int engine_init_display(struct engine* engine) {
 
     // Let's add a lua initialization to spice things up
     lua_State *L = luaL_newstate();
+    LOGI("LUA MODULE OPENED: %d", luaopen_foo(L));
     lua_close(L);
 
     return 0;
