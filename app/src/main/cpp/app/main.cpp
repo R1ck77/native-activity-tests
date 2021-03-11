@@ -69,6 +69,12 @@ struct engine {
     struct saved_state state;
 };
 
+/** 
+ * As short as it may be "L" seem to be a standard name
+ * for the Lua state…
+ */
+lua_State *L;
+
 /**
  * Initialize an EGL context for the current display.
  */
@@ -163,12 +169,14 @@ static int engine_init_display(struct engine* engine) {
     glShadeModel(GL_SMOOTH);
     glDisable(GL_DEPTH_TEST);
 
-    // Let's add a lua initialization to spice things up
-    lua_State *L = luaL_newstate();
-    LOGI("LUA MODULE OPENED: %d", luaopen_foo(L));
-    lua_close(L);
+
+    L = luaL_newstate();
 
     return 0;
+}
+
+static void lua_draw_frame(float r, float g, float b)
+{
 }
 
 /**
@@ -180,11 +188,10 @@ static void engine_draw_frame(struct engine* engine) {
         return;
     }
 
-    // Just fill the screen with a color.
-    glClearColor(((float)engine->state.x)/engine->width, engine->state.angle,
-                 ((float)engine->state.y)/engine->height, 1);
-    glClear(GL_COLOR_BUFFER_BIT);
-
+    lua_draw_frame(((float)engine->state.x)/engine->width,
+                   engine->state.angle,
+                   ((float)engine->state.y)/engine->height);
+    
     eglSwapBuffers(engine->display, engine->surface);
 }
 
