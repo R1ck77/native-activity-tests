@@ -40,6 +40,7 @@ extern "C" {
 
 #define LOGI(...) ((void)__android_log_print(ANDROID_LOG_INFO, "native-activity", __VA_ARGS__))
 #define LOGW(...) ((void)__android_log_print(ANDROID_LOG_WARN, "native-activity", __VA_ARGS__))
+#define LOGE(...) ((void)__android_log_print(ANDROID_LOG_ERROR, "native-activity", __VA_ARGS__))
 
 /**
  * Our saved state data.
@@ -74,6 +75,22 @@ struct engine {
  * for the Lua state…
  */
 lua_State *L;
+
+static void print_lua_error()
+{
+  LOGE(":LUA: %s\n", lua_tostring(L, -1));
+  lua_pop(L, 1); 
+}
+
+static lua_State *initialize_lua()
+{
+  lua_State *L = luaL_newstate();
+  luaL_openlibs(L);
+  luaopen_foo(L);
+  lua_setglobal(L, "foo");
+  return L;
+}
+
 
 /**
  * Initialize an EGL context for the current display.
@@ -169,14 +186,22 @@ static int engine_init_display(struct engine* engine) {
     glShadeModel(GL_SMOOTH);
     glDisable(GL_DEPTH_TEST);
 
-
-    L = luaL_newstate();
-
+    L = initialize_lua();
+    
     return 0;
 }
 
 static void lua_draw_frame(float r, float g, float b)
 {
+  lua_pushnumber(L, r);
+  lua_setglobal(L, "r");
+  lua_pushnumber(L, g);
+  lua_setglobal(L, "g");
+  lua_pushnumber(L, b);
+  lua_setglobal(L, "b");
+  luaL_loadstring(L, "foo.draw_gl_color(r, g, b)");
+  int error = lua_pcall(L, 0, 0, 0);
+  if(error) print_lua_error();
 }
 
 /**
