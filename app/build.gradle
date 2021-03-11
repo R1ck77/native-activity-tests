@@ -5,7 +5,7 @@ android {
     ndkVersion '22.0.7026061'
 
     defaultConfig {
-        applicationId = 'com.example.native_activity'
+        applicationId = 'it.couchgames.app.nativeactivitytest'
         minSdkVersion 21
         targetSdkVersion 28
         externalNativeBuild {
