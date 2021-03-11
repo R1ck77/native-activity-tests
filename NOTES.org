@@ -1,0 +1,38 @@
+
+* /some/path/libluashared should be different from /some/path/libluashared
+When CMake complains about strange errors, something about "libluashared destination should be different from source", do:
+
+#+begin_src elisp
+(shell-command "echo")
+(display-buffer "*Shell Command Output*")
+(shell-command "
+./gradlew clean
+rm -rf app/.cxx
+")
+
+#+end_src
+
+#+RESULTS:
+: 0
+
+to solve the problem. It's a NDK bug.
+* Starting the activity from adb
+
+To start the native activity from command line (the emulator buttons don't work and this is drawing me crazy!):
+
+#+begin_src elisp
+(shell-command "adb shell am start -a android.intent.action.MAIN -n \"it.couchgames.app.nativeactivitytest/android.app.NativeActivity\"")
+(display-buffer "*Shell Command Output*")
+#+end_src
+
+#+RESULTS:
+: 0
+
+* Compiling the code
+#+begin_src elisp
+(shell-command "./gradlew installDebug")
+(display-buffer "*Shell Command Output*")
+#+end_src
+
+#+RESULTS:
+: 0
