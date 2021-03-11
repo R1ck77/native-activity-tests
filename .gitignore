@@ -9,3 +9,4 @@
 /app/build/
 /app/.cxx/
 *.iml
+/build/
